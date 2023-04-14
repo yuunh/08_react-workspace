@@ -14,16 +14,153 @@ function App() {
 
   let [logo, setLogo] = useState('ReactBlog');
 
-  let [따봉, 따봉변경] = useState(0);
+  // let [따봉, 따봉변경] = useState(0);
+  let [like, setLike] = useState([0, 0, 0]);
+
+  let [modal, setModal] = useState(false); // ui 현재상태 : 열림, 닫힘,보임, 1, true ....
+
+  // 모든 array 뒤에 map() 사용 가능
+  // array의 자료 개수만큼 함수 안의 코드 실행해줌
+  // 함수의 파라미터는 array 안에 있는 자료임
+  // return에 뭐 적으면 array 담아줌
+  [1,2,3].map(function(a) {
+    return '123321';
+    console.log(a);
+  });
 
   function 함수() {
     console.log(1);
   }
 
-
   return (
     <div className="App">
-      <div className="black-nav">
+      
+      <Nav/>
+
+      <button onClick={ () => { 
+          // 글제목 변경
+          // b(['가을 코트 추천', '역삼 우동동 맛집', '리액트 독학'])
+
+          let copy = [...a]; // ... 새로운 주소값 부여
+          copy[0] = '가을 코트 추천';
+          b(copy);
+
+        }}>글제목 변경</button>
+
+        <button onClick={ () => { 
+          let copy = [...a].sort();
+          b(copy);
+
+        }}>정렬</button>
+
+      {/* <div className='list'>
+        <h4>{ a[0] } <span onClick={ () => { 따봉변경(따봉 + 1) } }>🎃</span> { 따봉 } </h4>
+        <p>4월 13일 발행</p>
+      </div>
+      <div className='list'>
+        <h4>{ a[1] }</h4>
+        <p>4월 13일 발행</p>
+      </div>
+      <div className='list'>
+        <h4 onClick={ () => { 
+          // 방법1. modal == false ? setModal(true) : setModal(false) 
+          // 방법2. setModal(!modal);
+          // 방법3.
+          if (modal == true) { // 현재 모달이 열려있다면
+            setModal(false); 
+          } else { // 현재 모달이 닫혀있다면
+            setModal(true);
+          }
+
+        } }>{ a[2] }</h4>
+        <p>4월 13일 발행</p>
+      </div> */}
+      
+      {
+        a.map(function(b, i) { // b: 순차적으로 접근한 요소 / i: 인덱스 : 0
+          return (
+            <div className='list'>
+              <h4>{ a[i] }
+                <span onClick={ () => { 
+                  // 따봉변경(따봉 + 1) 
+                  let newLike = [...like];
+                  newLike[i]++;
+                  setLike(newLike);
+                // } }>🎃</span> { 따봉 }
+                } }>🎃</span> { like[i] }
+              </h4>
+              <p>4월 13일 발행</p>
+            </div>
+          )
+        })
+      }
+
+      {/* <Modal></Modal> */}
+      {/* <Modal/> */}
+
+      { // 자바스크립트 쓰려면 {} 이거 열기
+        // if (조건식) { // if문 쓸 수 없음.. => 삼항연산자 사용하기
+        //   <Modal></Modal>
+        // }
+        // 삼항연산자
+        // 조건식 ? 참일때 실행할 코드 : 거짓일 때 실행할 코드
+        // 1 == 1 ? '맞음' : '틀림'
+        modal == true ? <Modal></Modal> : null
+      }
+
+      {/* 
+        * 리액트에서 동적인 UI(원래 없었는데 생기는거) 만드는 STEP
+        1. HTML,CSS로 미리 UI 디자인 해놓기
+        2. UI의 현재 상태를 state로 저장해두기
+        3. state의 상태에 따라서 UI가 어떻게 보일지 조건문 작성
+
+        ** 챌린지 : 글제목을 클릭하면 모달창이 보이게
+        ** 힌트 : 글제목 누르면 html 보이게 해주세요(x)
+                  글제목 누르면 state의 값을 변경해주세요 (o)
+
+        ** 챌린지 2탄 : 글제목 한 번 더 누르면 모달창 닫히게
+       */} 이윤화 빠큐.ㅗㅗㅗㅗㅗㅗㅜㅗㅗㅗㅗㅗㅗㅗㅗㅗㅗㅗㅗ
+    </div>
+  );
+}
+
+/*
+* 컴포넌트(축약한 HTML 덩어리) 만드는 법
+1. function 만들고
+2. return() 안에 html 담기
+3. <함수명></함수명> 쓰기
+
+* 컴포넌트 만들 때 주의사항
+1. component 작명할 땐 영어 대문자로 시작하게 작명
+2. return(<div></div>) 안에 html 태그들이 평행하게 여러개 들어가면 x
+3. function App(){} 내부에 만들면 안된다
+
+* 어떤 HTML들을 Component로 만드는게 좋을까?
+- 사이트에 반복해서 출현하는 HTML 덩어리
+- 긴 코드를 축약
+- 다른 곳에서 코드 재사용 할 때
+- 복잡한 코드를 작은 기능으로 나눌 때
+
+* 컴포넌트의 단점
+- 한 function 안에 있는 변수를 다른 function 호출할 수 없음
+- props 문법을 이용해서 state <Modal>까지 전달해줘야 사용할 수 있음
+
+* 챌린지 : 연습삼아 다른 컴포넌트 1개 만들기
+*/
+
+function Modal() {
+  return(
+    <div className='modal'>
+      <h4>제목</h4>
+      <p>날짜</p>
+      <p>상세내용</p>
+    </div>
+  )
+}
+
+function Nav() {
+  return(
+    <div className="black-nav">
         {/* 
           ** JSX 문법
           1. 리액트에서는 class 말고 className 이라고 쓰자
@@ -90,39 +227,9 @@ function App() {
           ** 응용문제 : 가나다순 정렬버튼
         */}
 
-        <h4>{ logo }</h4>
+        <h4>ReactBlog</h4>
       </div>
-
-      <button onClick={ () => { 
-          // 글제목 변경
-          // b(['가을 코트 추천', '역삼 우동동 맛집', '리액트 독학'])
-
-          let copy = [...a]; // ... 새로운 주소값 부여
-          copy[0] = '가을 코트 추천';
-          b(copy);
-
-        }}>글제목 변경</button>
-
-        <button onClick={ () => { 
-          let copy = [...a].sort();
-          b(copy);
-
-        }}>정렬</button>
-
-      <div className='list'>
-        <h4>{ a[0] } <span onClick={ () => { 따봉변경(따봉 + 1) } }>🎃</span> { 따봉 } </h4>
-        <p>4월 13일 발행</p>
-      </div>
-      <div className='list'>
-        <h4>{ a[1] }</h4>
-        <p>4월 13일 발행</p>
-      </div>
-      <div className='list'>
-        <h4>{ a[2] }</h4>
-        <p>4월 13일 발행</p>
-      </div>
-    </div>
-  );
+  )
 }
 
 export default App;
