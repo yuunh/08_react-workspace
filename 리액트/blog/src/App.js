@@ -14,10 +14,13 @@ function App() {
 
   let [logo, setLogo] = useState('ReactBlog');
 
-  // let [따봉, 따봉변경] = useState(0);
+  let [따봉, 따봉변경] = useState(0);
   let [like, setLike] = useState([0, 0, 0]);
 
   let [modal, setModal] = useState(false); // ui 현재상태 : 열림, 닫힘,보임, 1, true ....
+
+  let [title, setTitle] = useState(0);
+  let [입력값, 입력값변경] = useState('');
 
   // 모든 array 뒤에 map() 사용 가능
   // array의 자료 개수만큼 함수 안의 코드 실행해줌
@@ -53,7 +56,7 @@ function App() {
 
         }}>정렬</button>
 
-      {/* <div className='list'>
+      <div className='list'>
         <h4>{ a[0] } <span onClick={ () => { 따봉변경(따봉 + 1) } }>🎃</span> { 따봉 } </h4>
         <p>4월 13일 발행</p>
       </div>
@@ -74,16 +77,17 @@ function App() {
 
         } }>{ a[2] }</h4>
         <p>4월 13일 발행</p>
-      </div> */}
+      </div>
       
       {
         a.map(function(b, i) { // b: 순차적으로 접근한 요소 / i: 인덱스 : 0
           return (
             <div className='list'>
-              <h4>{ a[i] }
-                <span onClick={ () => { 
+              <h4 onClick={() => { setModal(!modal); setTitle(i)}}>{ a[i] }
+                <span onClick={ (e) => { 
+                  e.stopPropagation(); // 이벤트 버블링 막아주는 메소드
                   // 따봉변경(따봉 + 1) 
-                  let newLike = [...like];
+                  let newLike = [...like]; // [0, 0, 0]
                   newLike[i]++;
                   setLike(newLike);
                 // } }>🎃</span> { 따봉 }
@@ -95,6 +99,17 @@ function App() {
         })
       }
 
+      <input onChange={(e) => {
+        입력값변경(e.target.value); // ''
+        console.log(입력값); // 'ㅎ'
+      }}/>
+
+      <button onClick={() => {
+        let copy = [...a]; // [,,,]
+        copy.push(입력값); // [,,,ㅎ]
+        b(copy);
+      }}>추가</button>
+
       {/* <Modal></Modal> */}
       {/* <Modal/> */}
 
@@ -105,7 +120,7 @@ function App() {
         // 삼항연산자
         // 조건식 ? 참일때 실행할 코드 : 거짓일 때 실행할 코드
         // 1 == 1 ? '맞음' : '틀림'
-        modal == true ? <Modal></Modal> : null
+        modal == true ? <Modal color={'skyblue'} title={title} b={b} a={a} /> : null
       }
 
       {/* 
@@ -148,12 +163,25 @@ function App() {
 * 챌린지 : 연습삼아 다른 컴포넌트 1개 만들기
 */
 
-function Modal() {
+/*
+  부모 -> 자식 state 전송하는 방법
+  1. <자식컴포넌트 작명={state이름}> => 호출했던 곳
+  2. props 파라미터 등록 후 props. 작명 사용 => 찐 컴포넌트
+
+  챌린지1 : 글 수정 버튼 누르면 첫 글제목이 겨울코츠 추천으로 바뀌는
+*/
+
+function Modal(props) {
   return(
-    <div className='modal'>
-      <h4>제목</h4>
+    <div className='modal' style={{background: props.color}}>
+      <h4>{props.a[props.title]}</h4>
       <p>날짜</p>
       <p>상세내용</p>
+      <button onClick={ () => {
+        let copy = [...props.a]; // ['여름 코트 추천', '역삼 우동동 맛집', '리액트 독학']
+        copy[0] = '겨울코트 추천'; // ['겨울 코트 추천', '역삼 우동동 맛집', '리액트 독학']
+        props.b(copy);                                                 
+      }}>글수정</button>
     </div>
   )
 }
