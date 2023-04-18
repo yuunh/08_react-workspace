@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 function App() {
 
@@ -56,6 +56,8 @@ function App() {
 
         }}>정렬</button>
 
+      
+      {/* 
       <div className='list'>
         <h4>{ a[0] } <span onClick={ () => { 따봉변경(따봉 + 1) } }>🎃</span> { 따봉 } </h4>
         <p>4월 13일 발행</p>
@@ -77,10 +79,11 @@ function App() {
 
         } }>{ a[2] }</h4>
         <p>4월 13일 발행</p>
-      </div>
+      </div> 
+      */}
       
       {
-        a.map(function(b, i) { // b: 순차적으로 접근한 요소 / i: 인덱스 : 0
+        a.map(function(글, i) { // b: 순차적으로 접근한 요소 / i: 인덱스 : 0
           return (
             <div className='list'>
               <h4 onClick={() => { setModal(!modal); setTitle(i)}}>{ a[i] }
@@ -94,9 +97,22 @@ function App() {
                 } }>🎃</span> { like[i] }
               </h4>
               <p>4월 13일 발행</p>
+              <button onClick={() => {
+                let copy = [...a];
+                copy.splice(i, 1);
+                b(copy);
+              }}>삭제</button>
             </div>
           )
         })
+
+        /*
+        응용1. 글에 아무것도 입력안해도 추가버튼 누르면 추가 잘됨 => 막기
+
+        응용2. 따봉버튼 수정 (추가, 삭제)
+
+        응용3. 날짜 state로 만들어서 현재 날짜
+        */
       }
 
       <input onChange={(e) => {
@@ -122,6 +138,8 @@ function App() {
         // 1 == 1 ? '맞음' : '틀림'
         modal == true ? <Modal color={'skyblue'} title={title} b={b} a={a} /> : null
       }
+
+      <Modal2></Modal2>
 
       {/* 
         * 리액트에서 동적인 UI(원래 없었는데 생기는거) 만드는 STEP
@@ -184,6 +202,26 @@ function Modal(props) {
       }}>글수정</button>
     </div>
   )
+}
+
+// class를 이용한 옛날 React 문법
+class Modal2 extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      name : 'lee',
+      age : 20
+    }
+  }
+  render() {
+    return(
+      <div>안녕{this.state.age}
+        <button onClick={() => {
+          this.setState({age:21})
+        }}>버튼</button>
+      </div>
+    )
+  }
 }
 
 function Nav() {
